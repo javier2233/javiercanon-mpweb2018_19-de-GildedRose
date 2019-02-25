@@ -65,36 +65,4 @@ class GildedRose {
             $obj_quality->qualityProcess($item, self::MAX_QUALITY);
         }
     }
-
-    private function startSell($type, $item){
-        $less_sell = 1;
-        if($type == "conjured"){
-            $less_sell = 2;
-        }
-        $item->sell_in -=  $less_sell;
-        if($type == "backstage"){
-            if($item->sell_in < self::AFTER_CONCERT){
-                $item->quality = self::MIN_QUALITY;
-            }
-        }
-    }
-
-    private function  startQuality($type, $item){
-        if($item->quality < self::MAX_QUALITY){
-            switch ($type){
-                case 'aged':
-                    $aged = new Aged();
-                    $aged->qualityProcess($item);
-                    break;
-                case 'backstage':
-                    $aged = new Aged();
-                    $aged->qualityProcess($item, self::MAX_QUALITY);
-                    break;
-                default:
-                    $item->qualityProcess($item);
-
-            }
-        }
-    }
-
 }
