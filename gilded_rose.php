@@ -5,13 +5,19 @@
  * Date: 27/01/2019
  * Time: 12:46 PM
  */
-
+include 'Quality.php';
+include 'SellIn.php';
+include 'Item.php';
+include 'Aged.php';
+include 'Backstage.php';
+include 'Conjured.php';
 class GildedRose {
 
     private $items;
+    private $type;
     const MAX_QUALITY = 50;
     const MIN_QUALITY = 0;
-    const AFTER_CONCERT = 0;
+
     private $products = array(
         'aged'=> 'Aged Brie',
         'sulfuras' => 'Sulfuras, Hand of Ragnaros',
@@ -25,80 +31,70 @@ class GildedRose {
 
     function update_quality() {
         foreach ($this->items as $item) {
-            $type = array_search($item->name, $this->products);
-            //echo "type:" . $type . "\n";
-            $this->process_update_quality($type, $item);
+            $this->type = array_search($item->name, $this->products);
+            switch ($this->type){
+                case 'aged':
+                    $aged = new Aged();
+                    $obj_quality = $aged;
+                    $obj_sell = $item;
+                    //$aged->qualityProcess($item);
+                    break;
+                case 'backstage':
+                    $backstage = new Backstage();
+                    //$aged->qualityProcess($item, self::MAX_QUALITY);
+                    $obj_quality = $backstage;
+                    $obj_sell = $backstage;
+                    break;
+                case 'conjured':
+                    $conjured = new Conjured();
+                    $obj_quality = $item;
+                    $obj_sell = $conjured;
+                    break;
+                default:
+                    $obj_quality = $item;
+                    $obj_sell = $item;
+
+            }
+            $this->process_update_quality($obj_quality,$obj_sell, $item);
         }
     }
 
-    private function process_update_quality($type, $item){
-        if($type != "sulfuras"){
-            $this->processSell($type, $item);
-            $this->processQuality($type, $item);
+    private function process_update_quality($obj_quality, $obj_sell, $item){
+        if($this->type != "sulfuras"){
+            $obj_sell->SellInProcess($item, self::MIN_QUALITY);
+            $obj_quality->qualityProcess($item, self::MAX_QUALITY);
         }
     }
 
-    private function processSell($type, $item){
+    private function startSell($type, $item){
         $less_sell = 1;
         if($type == "conjured"){
             $less_sell = 2;
         }
         $item->sell_in -=  $less_sell;
-        if($item->sell_in < self::AFTER_CONCERT){
-            $item->quality = self::MIN_QUALITY;
+        if($type == "backstage"){
+            if($item->sell_in < self::AFTER_CONCERT){
+                $item->quality = self::MIN_QUALITY;
+            }
         }
     }
 
-    private function  processQuality($type, $item){
-        $valor_quality = 1;
-        switch ($type){
-            case 'aged':
-                if($item->quality < self::MAX_QUALITY){
-                    if($item->sell_in < 0){
-                        $valor_quality = 2;
-                    }
-                    $item->quality += $valor_quality;
-                }
-                break;
-            case 'backstage':
-                if($item->quality < self::MAX_QUALITY){
-                    if($item->sell_in < 11 && $item->sell_in > 5 ){
-                        //echo "entro 2 $item->sell_in \n";
-                        $valor_quality = 2;
-                    }elseif ($item->sell_in < 6 && $item->sell_in > 0){
-                        //echo "entro 3 $item->sell_in \n";
-                        $valor_quality = 3;
-                    }elseif ($item->sell_in < 0){
-                        $valor_quality = 0;
-                    }
-                    $item->quality += $valor_quality;
-                    $item->quality = ($item->quality > self::MAX_QUALITY  ? self::MAX_QUALITY  : $item->quality );
-                }
+    private function  startQuality($type, $item){
+        if($item->quality < self::MAX_QUALITY){
+            switch ($type){
+                case 'aged':
+                    $aged = new Aged();
+                    $aged->qualityProcess($item);
+                    break;
+                case 'backstage':
+                    $aged = new Aged();
+                    $aged->qualityProcess($item, self::MAX_QUALITY);
+                    break;
+                default:
+                    $item->qualityProcess($item);
 
-                break;
-            default:
-                if($item->quality > self::MIN_QUALITY){
-                    $item->quality -= $valor_quality;
-                }
+            }
         }
-    }
-
-}
-
-class Item {
-
-    public $name;
-    public $sell_in;
-    public $quality;
-
-    function __construct($name, $sell_in, $quality) {
-        $this->name = $name;
-        $this->sell_in = $sell_in;
-        $this->quality = $quality;
-    }
-
-    public function __toString() {
-        return "{$this->name}, {$this->sell_in}, {$this->quality}";
     }
 
 }
