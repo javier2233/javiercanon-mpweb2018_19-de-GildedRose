@@ -5,8 +5,9 @@
  * Date: 27/01/2019
  * Time: 12:47 PM
  */
-
-require_once 'gilded_rose.php';
+include_once "vendor/autoload.php";
+use GildedRose\Item as Item;
+use GildedRose\GildedRose as GildedRose;
 
 echo "OMGHAI!\n";
 
@@ -37,5 +38,5 @@ for ($i = 0; $i < $days; $i++) {
         echo $item . "\n";
     }
     echo PHP_EOL;
-    $app->update_quality();
+    $app->updateQuality();
 }
