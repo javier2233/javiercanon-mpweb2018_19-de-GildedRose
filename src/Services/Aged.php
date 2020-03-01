@@ -14,6 +14,7 @@ use GildedRose\Interfaces\Update;
 
 class Aged implements Update, Quality, SellIn
 {
+    const LESS_SELL = 1;
     public function updateItem(Item $item)
     {
         $this->qualityProcess($item);
@@ -29,8 +30,7 @@ class Aged implements Update, Quality, SellIn
     }
     public function sellInProcess($item, $min_quality = 0)
     {
-        $lessSell = 1;
-        $item->sellIn -= $lessSell;
+        $item->sellIn -= self::LESS_SELL;
     }
 
 

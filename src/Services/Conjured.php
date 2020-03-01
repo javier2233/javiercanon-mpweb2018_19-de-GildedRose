@@ -13,14 +13,15 @@ use GildedRose\Item;
 
 class Conjured implements Update,SellIn
 {
+    const LESS_SELL = 2;
     public function updateItem(Item $item)
     {
         $this->sellInProcess($item);
     }
 
     public function sellInProcess($item, $minQuality = 0){
-        $lessSell = 2;
-        $item->sellIn -= $lessSell;
+
+        $item->sellIn -= self::LESS_SELL;
     }
 
 }

@@ -15,7 +15,7 @@ use GildedRose\Interfaces\Update;
 class Backstage implements Update,Quality,SellIn
 {
     const AFTER_CONCERT = 0;
-
+    const LESS_SELL = 1;
     public function updateItem(Item $item)
     {
        $this->sellInProcess($item);
@@ -39,8 +39,7 @@ class Backstage implements Update,Quality,SellIn
     }
 
     public function sellInProcess($item, $minQuality){
-        $lessSell = 1;
-        $item->sellIn -= $lessSell;
+        $item->sellIn -= self::LESS_SELL;
         if($item->sellIn < self::AFTER_CONCERT){
             $item->quality = $minQuality;
         }

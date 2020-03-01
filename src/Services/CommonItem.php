@@ -15,7 +15,8 @@ use GildedRose\Interfaces\Update;
 use GildedRose\Item;
 
 class CommonItem implements Update, Quality, SellIn{
-
+    const VALUE_QUALITY = 1;
+    const LESS_SELL = 1;
     public function updateItem(Item $item)
     {
         $this->qualityProcess($item);
@@ -23,11 +24,11 @@ class CommonItem implements Update, Quality, SellIn{
     }
 
     public function qualityProcess($item, $maxQuality = 0){
-        $valueQuality = 1;
-        $item->quality -= $valueQuality;
+
+        $item->quality -= self::VALUE_QUALITY;
     }
     public function sellInProcess($item, $minQuality = 0){
-        $lessSell = 1;
-        $item->sellIn -= $lessSell;
+
+        $item->sellIn -= self::LESS_SELL;
     }
 }
