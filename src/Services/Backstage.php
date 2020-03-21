@@ -7,41 +7,47 @@
  */
 namespace GildedRose\Services;
 
+use GildedRose\Decorator\UpdateDecorator;
 use GildedRose\Item;
-use GildedRose\Interfaces\Quality;
-use GildedRose\Interfaces\SellIn;
-use GildedRose\Interfaces\Update;
 
-class Backstage implements Update,Quality,SellIn
+class Backstage extends UpdateDecorator
 {
     const AFTER_CONCERT = 0;
     const LESS_SELL = 1;
-    public function updateItem(Item $item)
+    const MAX_QUALITY = 50;
+    const MIN_QUALITY = 0;
+
+    public function __construct(Item $item)
     {
-       $this->sellInProcess($item);
-       $this->qualityProcess($item);
+        parent::__construct($item);
     }
 
-    public function qualityProcess($item, $maxQuality = 50){
+    public function updateItem()
+    {
+        $this->sellInProcess();
+        $this->qualityProcess();
+    }
+
+    public function qualityProcess(){
         $valueQuality = 1;
-        if($item->sellIn < 11 && $item->sellIn > 5 ){
+        if($this->item->sellIn < 11 && $this->item->sellIn > 5 ){
             //echo "in 2 $item->sellIn \n";
             $valueQuality = 2;
-        }elseif ($item->sellIn < 6 && $item->sellIn > 0){
+        }elseif ($this->item->sellIn < 6 && $this->item->sellIn > 0){
             //echo "in 3 $item->sellIn \n";
             $valueQuality = 3;
-        }elseif ($item->sellIn < 0){
+        }elseif ($this->item->sellIn < 0){
             $valueQuality = 0;
         }
-        $item->quality += $valueQuality;
-        $item->quality = ($item->quality > $maxQuality  ? $maxQuality  : $item->quality );
+        $this->item->quality += $valueQuality;
+        $this->item->quality = ($this->item->quality > self::MAX_QUALITY ? self::MAX_QUALITY : $this->item->quality );
 
     }
 
-    public function sellInProcess($item, $minQuality){
-        $item->sellIn -= self::LESS_SELL;
-        if($item->sellIn < self::AFTER_CONCERT){
-            $item->quality = $minQuality;
+    public function sellInProcess(){
+        $this->item->sellIn -= self::LESS_SELL;
+        if($this->item->sellIn < self::AFTER_CONCERT){
+            $this->item->quality = self::MIN_QUALITY;
         }
     }
 

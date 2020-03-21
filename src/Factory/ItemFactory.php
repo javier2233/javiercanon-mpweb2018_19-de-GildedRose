@@ -15,19 +15,20 @@ use GildedRose\Services\Sulfuras;
 
 class ItemFactory
 {
-    public function createItem($nameItem){
+    public function createItem($item){
 
+        $nameItem = $item->name;
         switch ($nameItem){
             case 'Aged Brie':
-                return new Aged();
+                return new Aged($item);
             case 'Sulfuras, Hand of Ragnaros':
-                return new Sulfuras();
+                return new Sulfuras($item);
             case 'Backstage passes to a TAFKAL80ETC concert':
-                return new Backstage();
+                return new Backstage($item);
             case 'Conjured Mana Cake':
-                return new Conjured();
+                return new Conjured($item);
             default:
-                return new CommonItem();
+                return new CommonItem($item);
         }
     }
 }

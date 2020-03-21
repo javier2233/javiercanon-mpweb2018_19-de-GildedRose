@@ -9,21 +9,30 @@
 namespace GildedRose\Services;
 
 
-use GildedRose\Interfaces\Quality;
-use GildedRose\Interfaces\Update;
+use GildedRose\Decorator\UpdateDecorator;
 use GildedRose\Item;
 
-class Sulfuras implements Update,Quality
+class Sulfuras extends UpdateDecorator
 {
     const QUALITY_SULFURAS = 80;
-    public function updateItem(Item $item)
+    public function __construct(Item $item)
     {
-       $this->qualityProcess($item, 50);
+        parent::__construct($item);
     }
 
-    public function qualityProcess($item, $maxQuality)
+    public function updateItem()
     {
-        $item->quality = self::QUALITY_SULFURAS;
+       $this->qualityProcess();
+    }
+
+    public function qualityProcess()
+    {
+        $this->item->quality = self::QUALITY_SULFURAS;
+    }
+
+    public function sellInProcess()
+    {
+        // TODO: Implement sellInProcess() method.
     }
 
 }

@@ -7,31 +7,35 @@
  */
 namespace GildedRose\Services;
 
-use GildedRose\Interfaces\Quality;
-use GildedRose\Interfaces\SellIn;
+use GildedRose\Decorator\UpdateDecorator;
 use GildedRose\Item;
-use GildedRose\Interfaces\Update;
 
-class Aged implements Update, Quality, SellIn
+class Aged extends UpdateDecorator
 {
     const LESS_SELL = 1;
-    public function updateItem(Item $item)
+
+    public function __construct(Item $item)
     {
-        $this->qualityProcess($item);
-        $this->sellInProcess($item);
+        parent::__construct($item);
     }
 
-    public function qualityProcess($item, $maxQuality = 0){
+    public function updateItem()
+    {
+        $this->qualityProcess();
+        $this->sellInProcess();
+    }
+
+    public function qualityProcess(){
         $valueQuality = 1;
-        if($item->sellIn <= 0){
+        if($this->item->sellIn <= 0){
             $valueQuality = 2;
         }
-        $item->quality += $valueQuality;
-    }
-    public function sellInProcess($item, $min_quality = 0)
-    {
-        $item->sellIn -= self::LESS_SELL;
+        $this->item->quality += $valueQuality;
     }
 
+    public function sellInProcess()
+    {
+        $this->item->sellIn -= self::LESS_SELL;
+    }
 
 }

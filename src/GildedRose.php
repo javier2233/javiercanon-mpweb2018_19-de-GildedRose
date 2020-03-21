@@ -28,8 +28,7 @@ class GildedRose {
 
     function updateQuality() {
         foreach ($this->items as $item) {
-            $name = $item->getName();
-            $itemType = ItemFactory::createItem($name);
+            $itemType = ItemFactory::createItem($item);
             $itemType->updateItem($item);
         }
     }

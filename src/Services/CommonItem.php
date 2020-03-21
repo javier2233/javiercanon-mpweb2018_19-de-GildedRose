@@ -9,26 +9,30 @@
 namespace GildedRose\Services;
 
 
-use GildedRose\Interfaces\Quality;
-use GildedRose\Interfaces\SellIn;
-use GildedRose\Interfaces\Update;
+use GildedRose\Decorator\UpdateDecorator;
 use GildedRose\Item;
 
-class CommonItem implements Update, Quality, SellIn{
+class CommonItem extends UpdateDecorator {
     const VALUE_QUALITY = 1;
     const LESS_SELL = 1;
-    public function updateItem(Item $item)
+    public function __construct(Item $item)
     {
-        $this->qualityProcess($item);
-        $this->sellInProcess($item);
+        parent::__construct($item);
     }
 
-    public function qualityProcess($item, $maxQuality = 0){
-
-        $item->quality -= self::VALUE_QUALITY;
+    public function updateItem()
+    {
+        $this->qualityProcess();
+        $this->sellInProcess();
     }
-    public function sellInProcess($item, $minQuality = 0){
 
-        $item->sellIn -= self::LESS_SELL;
+    public function qualityProcess(){
+
+        $this->item->quality -= self::VALUE_QUALITY;
+    }
+
+    public function sellInProcess(){
+
+        $this->item->sellIn -= self::LESS_SELL;
     }
 }

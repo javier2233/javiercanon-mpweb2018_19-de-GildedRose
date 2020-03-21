@@ -13,5 +13,7 @@ use GildedRose\Item;
 
 interface Update
 {
-    public function updateItem(Item $item);
+    public function updateItem();
+    public function qualityProcess();
+    public function sellInProcess();
 }

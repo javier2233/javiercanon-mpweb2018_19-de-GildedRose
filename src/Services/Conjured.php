@@ -7,21 +7,31 @@
  */
 namespace GildedRose\Services;
 
-use GildedRose\Interfaces\SellIn;
-use GildedRose\Interfaces\Update;
+use GildedRose\Decorator\UpdateDecorator;
 use GildedRose\Item;
 
-class Conjured implements Update,SellIn
+class Conjured extends UpdateDecorator
 {
     const LESS_SELL = 2;
-    public function updateItem(Item $item)
+
+    public function __construct(Item $item)
     {
-        $this->sellInProcess($item);
+        parent::__construct($item);
     }
 
-    public function sellInProcess($item, $minQuality = 0){
+    public function updateItem()
+    {
+        $this->sellInProcess();
+    }
 
-        $item->sellIn -= self::LESS_SELL;
+    public function sellInProcess(){
+
+        $this->item->sellIn -= self::LESS_SELL;
+    }
+
+    public function qualityProcess()
+    {
+        // TODO: Implement qualityProcess() method.
     }
 
 }
