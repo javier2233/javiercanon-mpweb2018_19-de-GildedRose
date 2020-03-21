@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: javie
- * Date: 27/01/2019
- * Time: 12:47 PM
- */
 include_once "vendor/autoload.php";
 use GildedRose\Item as Item;
 use GildedRose\GildedRose as GildedRose;

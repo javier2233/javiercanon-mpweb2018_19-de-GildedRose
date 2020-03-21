@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: javier
- * Date: 26/06/2019
- * Time: 9:51 PM
- */
+
 
 namespace GildedRose\Factory;
 use GildedRose\Services\Aged;

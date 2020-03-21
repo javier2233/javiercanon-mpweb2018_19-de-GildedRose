@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: javie
- * Date: 27/01/2019
- * Time: 12:46 PM
- */
+
 namespace GildedRose;
 
 use GildedRose\Factory\ItemFactory;

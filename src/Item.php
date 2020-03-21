@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: javie
- * Date: 24/02/2019
- * Time: 8:51 PM
- */
+
 namespace GildedRose;
 
 

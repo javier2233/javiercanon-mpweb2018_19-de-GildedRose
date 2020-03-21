@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: javier
- * Date: 30/06/2019
- * Time: 12:29 PM
- */
+
 
 namespace GildedRose\Services;
 
